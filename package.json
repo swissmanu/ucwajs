@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Access Skype for Business UCWA",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "node index.js"
   },

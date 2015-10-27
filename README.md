@@ -4,6 +4,22 @@ Implements very basic functionality to communicate with the Skype for Business W
 ## Experimental!
 This library is in a very experimental state. Do expect problems and obstacles ahead 💩
 
+## Configuration & Preparation
+Run `npm install` and create a copy of `config.sample.json` named `config.json`. Fill in your Skype for Business credentials.
+
+
+## Run
+```bash
+npm run
+```
+
+## Debug
+`ucwajs` uses `debug` to provide traces during runtime. Enable them by passing the `DEBUG` environment variable:
+
+```bash
+DEBUG=ucawjs npm run
+```
+
 ## Reference
 
 * https://www.matthewproctor.com/Send-An-IM-With-UCWA-Creating-the-Application/
