@@ -1,0 +1,11 @@
+{
+  "name": "ucwajs",
+  "version": "0.0.1",
+  "description": "Access Skype for Business UCWA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manuel Alabor <manuel@alabor.me>",
+  "license": "MIT"
+}
