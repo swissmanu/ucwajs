@@ -23,29 +23,48 @@ auth(autoDiscoverResource, username, password)
 			.then(function(autoDiscover) {
 				return applicationResourceFactory(config, token, autoDiscover._links.user.href)()
 					.then(function(application) {
-						console.log(util.inspect(application, { depth: null }));
+						//console.log(util.inspect(application, { depth: null }));
 						
 						// Start Event listener:
 						var events = new Events(token);
 						events.on('event', function(data) {
-							console.log(util.inspect(data, { depth: null }));
+							//console.log(util.inspect(data, { depth: null }));
+
+							data.forEach(function(sender) {
+								if(sender.rel === 'people') {
+									var contactPresenceEvents = sender.events.filter(function(event) {
+										return event.link.rel === 'contactPresence';
+									});
+									
+									contactPresenceEvents.forEach(function(contactPresenceEvent) {
+										superagent
+											.get('https://uccweb.finnova.com' + contactPresenceEvent.link.href)
+											.set('Authorization', 'Bearer ' + token)
+											.end(function(err, res) {
+												console.log(res.body.availability)
+											});
+									});
+								}
+							})
+
+
 						});
 						events.start('https://uccweb.finnova.com' + application._links.events.href);
 
 						// Subscribe to messaging:
-						var makeMeAvailable = 'https://uccweb.finnova.com' + application._embedded.me._links.makeMeAvailable.href;
-						superagent
-							.post(makeMeAvailable)
-							.set('Authorization', 'Bearer ' + token)
-							.send({
-								supportedMessageFormats: [ 'Plain' ],
-								supportedModalities: [ 'Messaging' ]
-							})
-							.end(function(err, res) {
-								if(err) {
-									console.log('ERROR', err);
-								}
-							});
+						// var makeMeAvailable = 'https://uccweb.finnova.com' + application._embedded.me._links.makeMeAvailable.href;
+						// superagent
+						// 	.post(makeMeAvailable)
+						// 	.set('Authorization', 'Bearer ' + token)
+						// 	.send({
+						// 		supportedMessageFormats: [ 'Plain' ],
+						// 		supportedModalities: [ 'Messaging', 'PhoneAudio']
+						// 	})
+						// 	.end(function(err, res) {
+						// 		if(err) {
+						// 			console.log('ERROR', err);
+						// 		}
+						// 	});
 
 						// Subscribe to my presence:
 						var me = application._embedded.me.uri;
